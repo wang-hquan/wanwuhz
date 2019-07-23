@@ -18,19 +18,17 @@
         }
     </style>
     <script src="__js__/jquery.min.js"></script>
-<!--   <script src="__js__/verificationNumbers.js" tppabs="js/verificationNumbers.js"></script>-->
     <script src="__module__/layer/layer.js"></script>
-<!--    <script src="__js__/Particleground.js" tppabs="js/Particleground.js"></script>-->
 
 </head>
 <body>
 <?php
-	    $username = session('username');
+	    $username = 	session('username');
 		if(!empty($username )){  ?>
-<script type="text/javascript">window.location.href="{:url('admin/index/index')}";
+<script type="text/javascript">
+    window.location.href="{:url('admin/index/index')}";
 </script>
 <?php  } ?>
-
 <dl class="admin_login">
     <dt>
         <strong>欢迎来到合众后台管理系统</strong>
@@ -67,7 +65,6 @@
     //     });
     // });
 
-
     function login(){
         var username  = $('#username').val();
         var password  = $('#password').val();
@@ -81,6 +78,7 @@
             },
         })
             .done(function(data){
+                console.log(data);
                 if(data.code==0){
                     layer.msg(data.msg,{});
                 }else{

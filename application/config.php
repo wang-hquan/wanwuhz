@@ -144,13 +144,9 @@ return [
 
     // 视图输出字符串内容替换
     'view_replace_str'       => [
-        '__static__'=>'/public/static',
-        '__ueditor__' =>'/public/ueditor',
         '__module__'=>'/public/static/module',
-        '__js__'=>'/public/static/js',
-        '__css__'=>'/public/static/css',
-        '__images__'=>'/public/static/images',
-
+        '__css__' => '/public/static/css',
+        '__js__' => '/public/static/js'
     ],
     // 默认跳转页面对应的模板文件
     'dispatch_success_tmpl'  => THINK_PATH . 'tpl' . DS . 'dispatch_jump.tpl',

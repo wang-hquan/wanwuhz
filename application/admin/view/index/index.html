@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>layout 后台大布局 - Layui</title>
+    <script src="__js__/jquery.min.js"></script>
+    <link rel="stylesheet" href="__module__/layui/css/layui.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">合众 后台</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item"><a href="/admin/login/logout">退了</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+
+                {foreach name="menu" item="vo"}
+
+                {if condition="isset($vo['children'])"}
+                <li data-name="component" class="layui-nav-item">
+                    <a href="javascript:;" lay-tips="组件" lay-direction="2">
+                        <cite>{$vo.title}</cite>
+                        <span class="layui-nav-more"></span></a>
+                    <dl class="layui-nav-child">
+                        {foreach name="vo['children']" item="v"}
+                        {if condition="isset($v['children'])"}
+                        <dd data-name="grid">
+                            <a href="javascript:;">{$v.title}<span class="layui-nav-more"></span></a>
+                            <dl class="layui-nav-child">
+                                {foreach name="v['children']" item="vs"}
+                                <dd data-name="list">
+                                    <a _href="component/grid/list.html" class="test">{$vs.title}</a>
+                                </dd>
+                                {/foreach}
+                            </dl>
+                        </dd>
+                        {else /}
+                        <dd data-name="button">
+                            <a _href="component/button/index.html" class="test">{$v.title}</a>
+                        </dd>
+                        {/if}
+                        {/foreach}
+                    </dl>
+                </li>
+                {else /}
+                <li class="layui-nav-item">
+                    <a _href="/{$vo.name}" class="test">{$vo.title}</a>
+                </li>
+                {/if}
+                {/foreach}
+
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <iframe id="iframe" src="/admin/index/welcome" frameborder="0" width="100%" height="95%"></iframe>
+    </div>
+
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+<script src="__module__/layui/layui.js"></script>
+<script>
+    //JavaScript代码区域
+    layui.use('element', function () {
+        var element = layui.element;
+
+    });
+    $('.test').click(function () {
+       var url  =  $(this).attr('_href');
+       console.log(url);
+        $("#iframe").attr("src", url);
+
+    })
+</script>
+</body>
+</html>
