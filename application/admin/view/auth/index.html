@@ -1,0 +1,101 @@
+{include file='public/head'}
+<body style="margin-left: 20px;margin-top: 20px">
+
+<!--搜索-->
+<div class="demoTable">
+
+    <button class="layui-btn layui-btn-small "
+            onclick="x_admin_show('添加菜单','showAdd.html',600,600)">添加菜单</button>
+    <button onclick="javascript:location.reload()" class="layui-btn layui-btn-small">刷新</button>
+
+</div>
+
+<script type="text/html" id="sexTpl">
+    {{#  if(d.status == 1){ }}
+    <span style="color: #F581B1;">开启</span>
+    {{#  } else { }}
+    禁用
+    {{#  } }}
+</script>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+
+<table class="layui-hide" id="test" lay-filter="test"></table>
+
+
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+
+        table.render({
+            elem: '#test'
+            ,url:'/admin/auth/auth_list'
+            ,title: '权限路径表'
+            ,loading:true
+            ,cols: [[
+                {type: 'checkbox', fixed: 'left'}
+                ,{field:'id', title:'id', width:80, fixed: 'left', unresize: true, sort: true}
+                ,{field:'name', title:'规则名称', width:120}
+                ,{field:'title', title:'标题', width:180}
+                ,{field:'status', title:'状态', width:85,templet: '#sexTpl'}
+                ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+            ]]
+        });
+
+
+        //监听行工具事件
+        table.on('tool(test)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'del'){
+                layer.confirm('真的删除行么', function(index){
+
+                    var id = data.id;
+                    $.post("{:url('admin/auth/delete')}", {id: id}, function(data, textStatus, xhr) {
+                        if(data.code==1){
+                            layer.msg(data.msg,{icon:1,time:1000},function(){
+                                obj.del();
+                                layer.close(index);
+                            });
+                        }else{
+                            layer.msg(data.msg,{icon:2,time:1000});
+                        }
+
+                    });
+
+                });
+            } else if(obj.event === 'edit'){
+                var id = obj.data.id
+                x_admin_show('编辑','edit.html?id='+id,600,600);
+            }
+        });
+
+        var $ = layui.$, active = {
+            reload: function(){
+
+                //执行重载
+                table.reload('test', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    ,where: {
+                        key: {
+                        }
+                    }
+                }, 'data');
+            }
+        };
+
+        $('.demoTable .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+    });
+
+</script>
+</body>
+{include file='public/foot'}

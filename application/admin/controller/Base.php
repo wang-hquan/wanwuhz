@@ -74,7 +74,9 @@ class Base extends Controller
         $arr = array_unique(explode(',', implode(',', $arr)));
         sort($arr);
         $auth_id = implode(',',$arr);
-
+        if($auth_id==''){
+            $this->error('此用户暂未激活,请联系管理员处理','/admin/login/logout');
+        }
         $data =Db::name('auth_rule')
             ->where('status',1)
             ->where('id IN ('.$auth_id.')')

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>layout 后台大布局 - Layui</title>
+    <title>合众-后台管理</title>
     <script src="__js__/jquery.min.js"></script>
     <link rel="stylesheet" href="__module__/layui/css/layui.css">
 </head>
@@ -37,14 +37,14 @@
                             <dl class="layui-nav-child">
                                 {foreach name="v['children']" item="vs"}
                                 <dd data-name="list">
-                                    <a _href="component/grid/list.html" class="test">{$vs.title}</a>
+                                    <a _href="/{$vs.name}" class="test">{$vs.title}</a>
                                 </dd>
                                 {/foreach}
                             </dl>
                         </dd>
                         {else /}
                         <dd data-name="button">
-                            <a _href="component/button/index.html" class="test">{$v.title}</a>
+                            <a _href="/{$v.name}" class="test">{$v.title}</a>
                         </dd>
                         {/if}
                         {/foreach}
@@ -70,7 +70,6 @@
 
     <div class="layui-footer">
         <!-- 底部固定区域 -->
-        © layui.com - 底部固定区域
     </div>
 </div>
 <script src="__module__/layui/layui.js"></script>
@@ -82,7 +81,6 @@
     });
     $('.test').click(function () {
        var url  =  $(this).attr('_href');
-       console.log(url);
         $("#iframe").attr("src", url);
 
     })

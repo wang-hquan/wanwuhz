@@ -1,0 +1,148 @@
+{include file='public/head'}
+<body>
+<style media="screen" type="text/css">
+    header {
+        color: black;
+    }
+</style>
+<div class="x-body">
+    <form action="editAuth" class="layui-form" id="mainForm" method="post" style="margin-right: 20px;">
+
+        <div class="layui-form-item" style="margin-top: 20px">
+            <input type="hidden" name='id' value="{$data.id}">
+
+            <label class="layui-form-label">
+                上级菜单
+            </label>
+            <div class="layui-input-block">
+                <select lay-filter="aihao" name="pid" id='pid'>
+                    <option value="0">顶级菜单
+                    </option>
+                    {php}
+                    foreach($auth as $vo){
+                    if($vo['id']==$data['pid']){
+                    {/php}
+                    <option  value="{$vo.id}" selected>{$vo.title}</option>
+                    {php}	}else {   {/php}
+                    <option value="{$vo.id}">{$vo.title}</option>
+                    {php}  }   } {/php}
+
+                </select>
+            </div>
+
+            <div class="layui-form-item" style="margin-top: 20px">
+                <label class="layui-form-label">
+                    菜单名称
+                </label>
+                <div class="layui-input-block">
+                    <input autocomplete="off" class="layui-input" value="{$data.title}" id="title" lay-verify="required" name="title" placeholder="请输入菜单名称" type="text">
+                    </input>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    控制器
+                </label>
+                <div class="layui-input-block">
+                    <input autocomplete="off" class="layui-input" value="{$data.name}" id="name" lay-verify="required" name="name" placeholder="请输入控制器" type="text">
+                    </input>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    状态
+                </label>
+                <div class="layui-input-block">
+                    <select name="status" id='status' lay-filter="aihao" name="interest">
+                        <option value="1" {php} if($data['status']==1){echo 'selected';} {/php}>显示</option>
+                        <option value="0" {php} if($data['status']==0){echo 'selected';} {/php}>隐藏</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    排序
+                </label>
+                <div class="layui-input-block">
+                    <input autocomplete="off" class="layui-input" value="{$data.sort}" id="sort"   lay-verify="required" name="sort" placeholder="排序数值越大排列越靠前" type="text" value="0">
+                    </input>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn"  lay-filter="toSubmit" lay-submit=""  style="margin-left: 33%">
+                        提交
+                    </button>
+                    <button style="display: none;" class="layui-btn layui-btn-primary" id="reset" type="reset">
+                        重置
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </form>
+</div>
+</body>
+<script type="text/javascript">
+    layui.use('form', function(){
+        var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+
+        //……
+
+        //但是，如果你的HTML是动态生成的，自动渲染就会失效
+        //因此你需要在相应的地方，执行下述方法来手动渲染，跟这类似的还有 element.init();
+        form.render();
+    });
+
+    var form = layui.form;
+    var layer = layui.layer;
+    //自定义验证规则
+    form.verify({
+        title: function(value){
+            if(value.length < 3){
+                return '标题至少得2个字符啊';
+            }
+        }
+    });
+
+    $(document).ready(function(){
+        var options = {
+            type:'post',           //post提交
+            //url:'http://ask.tongzhuo100.com/server/****.php?='+Math.random(),   //url
+            dataType:"json",        //json格式
+            data:{},    //如果需要提交附加参数，视情况添加
+            clearForm: false,        //成功提交后，清除所有表单元素的值
+            resetForm: false,        //成功提交后，重置所有表单元素的值
+            cache:false,
+            async:false,          //同步返回
+            success:function(data){
+                console.log(data);
+                if(data.code==0){
+                    layer.msg(data.msg);
+                }else{
+                    layer.msg(data.msg,{icon:1,time:1000},function(){
+                        $("#reset").click();
+                        x_admin_close();
+                        parent.location.reload();
+                    });
+                }
+                //服务器端返回处理逻辑
+            },
+            error:function(XmlHttpRequest,textStatus,errorThrown){
+                layer.msg('操作失败:服务器处理失败');
+            }
+        };
+        // bind form using 'ajaxForm'
+        $('#mainForm').ajaxForm(options).submit(function(data){
+            //无逻辑
+        });
+
+    });
+</script>
+
+{include file='public/foot'}

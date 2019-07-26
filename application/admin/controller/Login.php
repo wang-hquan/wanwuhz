@@ -34,6 +34,7 @@ class Login extends Controller
         } else {
             $sql_password = Db::name('user')
                 ->where('username', $username)
+                ->where('status',1)
                 ->value('password');
             if (md5($post['password']) !== $sql_password) {
                 $this->error('密码错误');
